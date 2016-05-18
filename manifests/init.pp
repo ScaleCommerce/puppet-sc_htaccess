@@ -41,12 +41,12 @@ class sc_htaccess(
   $group          = 'www-data',
   $auth_name      = '',
   $htpasswd_file_path,
-  $htuser         = {},
   $ensure         = 'file',
 ) {
 
   $htpasswd_file = "$htpasswd_file_path/.htpasswd"
   $htaccess_file = "$protected_dir/.htaccess"
+  $htuser        = hiera_hash('sc_htaccess::htuser', {})
 
   file { $htpasswd_file:
     path => "$htpasswd_file_path/.htpasswd",
