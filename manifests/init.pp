@@ -65,7 +65,7 @@ class sc_htaccess(
       ensure => present,
       path => $htaccess_file,
       match => '^AuthUserFile',
-      line => $htpasswd_file,
+      line => "AuthUserFile '$htpasswd_file'",
     }
   }
 
