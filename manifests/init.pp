@@ -1,4 +1,4 @@
-# == Class: dummy
+# == Class: sc_hataccess
 #
 # Full description of class dummy here.
 #
@@ -29,13 +29,36 @@
 #
 # === Authors
 #
-# Author Name <author@domain.com>
+# Andreas Ziethen ScaleCommerce GmbH <az@scale.sc>
 #
 # === Copyright
 #
 # Copyright 2016 Your name here, unless otherwise noted.
 #
-class dummy {
+class sc_htaccess(
+  $protected_dir,
+  $owner          = 'www-data',
+  $group          = 'www-data',
+  $auth_name      = '',
+  $htpasswd_file_path,
+  $htuser         = {},
+  $ensure         = 'file',
+) {
 
+  file { $htpasswd_file_path:
+    path => "$htpasswd_file_path/.htpasswd",
+    owner => $owner,
+    group => $group,
+    ensure => $ensure,
+    content => template("${module_name}/htpasswd.erb"),
+  }->
+
+  file { $protected_dir:
+    path => "$protected_dir/htaccess",
+    owner => $owner,
+    group => $group,
+    ensure => $ensure,
+    content => template("${module_name}/htaccess.erb"),
+  }
 
 }

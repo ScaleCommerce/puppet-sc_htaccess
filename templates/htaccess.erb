@@ -1,0 +1,5 @@
+AuthType basic
+AuthName "<%= auth_name %>"
+AuthBasicProvider file
+AuthUserFile "<%= auth_user_file_path %>/.htpasswd"
+Require valid-user

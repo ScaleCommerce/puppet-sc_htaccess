@@ -1,8 +1,8 @@
 {
-  "name": "scalecommerce-dummy",
+  "name": "scalecommerce-sc_htaccess",
   "version": "0.1.0",
-  "author": "scalecommerce",
-  "summary": "Helps a lot! ;-)",
+  "author": "Andreas Ziethen ScaleCommerce GmbH",
+  "summary": "Simple module to create and maintain htaccess protection for selected directories",
   "license": "Apache 2.0",
   "source": "",
   "project_page": null,
