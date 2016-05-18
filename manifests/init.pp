@@ -1,31 +1,36 @@
 # == Class: sc_hataccess
 #
-# Full description of class dummy here.
-#
-# === Parameters
-#
-# Document parameters here.
-#
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# Simple class to generate and maintain htaccess and htpasswd files.
 #
 # === Variables
 #
 # Here you should define a list of variables that this module would require.
 #
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if
-#   it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should be avoided in favor of class parameters as
-#   of Puppet 2.6.)
+# [*protected_dir*]
+#   The directory which should be protected and where the .htaccess file will be placed.
 #
-# === Examples
+# [*owner*]
+#   Owner of files .htaccess and .htpasswd
 #
-#  class { 'dummy':
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
-#  }
+# [*group*]
+#   Group of files .htaccess and .htpasswd
+#
+# [*auth_name*]
+#   Content of AuthName string in .htaccess file
+#
+# [*ensure*]
+#   Ensure param for both files. Default is 'file', could be set to 'absent' to delete both files.
+#
+# === hiera Example
+#
+# classes:
+#   - sc_htaccess
+#
+# sc_htaccess::protected_dir: /var/www/adminer.domain.com/web
+# sc_htaccess::auth_name: 'domain Adminer'
+# sc_htaccess::htpasswd_file_path: /var/www/adminer.domain.com
+# sc_htaccess::htuser:
+#   <USERNAME>: <ENCRYPTED PASSWORD>
 #
 # === Authors
 #
@@ -37,7 +42,6 @@
 #
 class sc_htaccess(
   $protected_dir,
-  $replace_auth_user_file = true,
   $owner                  = 'www-data',
   $group                  = 'www-data',
   $auth_name              = '',
