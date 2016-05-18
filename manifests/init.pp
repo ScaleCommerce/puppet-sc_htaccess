@@ -57,7 +57,7 @@ class sc_htaccess(
   }->
 
   file { $htaccess_file:
-    path => "$protected_dir/htaccess",
+    path => "$protected_dir/.htaccess",
     owner => $owner,
     group => $group,
     ensure => $ensure,
