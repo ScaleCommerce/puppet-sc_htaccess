@@ -33,7 +33,7 @@
 #
 # === Copyright
 #
-# Copyright 2016 Your name here, unless otherwise noted.
+# Copyright 2016 ScaleCommerce GmbH
 #
 class sc_htaccess(
   $protected_dir,
