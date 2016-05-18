@@ -66,6 +66,7 @@ class sc_htaccess(
       path => $htaccess_file,
       match => '^AuthUserFile',
       line => "AuthUserFile '$htpasswd_file'",
+      onlyif      => "/usr/bin/test -s $htaccess_file",
     }
   }
 
