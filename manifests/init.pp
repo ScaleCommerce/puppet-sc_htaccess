@@ -50,25 +50,17 @@ class sc_htaccess(
   $htuser        = hiera_hash('sc_htaccess::htuser', {})
 
   # check if file exists
-#  exec { 'check_presence_of_htaccess_file':
-#    command => '/bin/false',
-#    unless => "/usr/bin/test -f $htaccess_file",
-#  }
+  exec { 'check_presence_of_htaccess_file':
+    command => '/bin/false',
+    onlyif => "/usr/bin/test -f $htaccess_file",
+  }
 
 #  exec { 'check_absence_of_htaccess_file':
 #    command => '/bin/false',
 #    unless => "/usr/bin/test ! -f $htaccess_file",
 #  }
 
-  if $replace_auth_user_file {
-    file_line { 'replace_auth_user_file':
-      ensure => present,
-      path => $htaccess_file,
-      match => '^AuthUserFile',
-      line => "AuthUserFile '$htpasswd_file'",
-      onlyif      => "/usr/bin/test -s $htaccess_file",
-    }
-  }
+
 
 #  file_line { 'add_auth_user_file':
 #    require => Exec['check_presence_of_htaccess_file'],
@@ -76,20 +68,26 @@ class sc_htaccess(
 
 
 
-#  file { $htpasswd_file:
-#    path => "$htpasswd_file_path/.htpasswd",
-#    owner => $owner,
-#    group => $group,
-#    ensure => $ensure,
-#    content => template("${module_name}/htpasswd.erb"),
-#  }->
-#
-#  file { $htaccess_file:
-#    path => "$protected_dir/.htaccess",
-#    owner => $owner,
-#    group => $group,
-#    ensure => $ensure,
-#    content => template("${module_name}/htaccess.erb"),
-#  }
+  file { $htpasswd_file:
+    path => "$htpasswd_file_path/.htpasswd",
+    owner => $owner,
+    group => $group,
+    ensure => $ensure,
+    content => template("${module_name}/htpasswd.erb"),
+  }->
 
+  file { $htaccess_file:
+    path => "$protected_dir/.htaccess",
+    owner => $owner,
+    group => $group,
+    ensure => $ensure,
+    replace => false,
+    content => template("${module_name}/htaccess.erb"),
+  }->
+  file_line { 'replace_auth_user_file':
+    ensure => present,
+    path => $htaccess_file,
+    match => '^AuthUserFile',
+    line => "AuthUserFile '$htpasswd_file'",
+  }
 }
