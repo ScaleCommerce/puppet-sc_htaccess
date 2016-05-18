@@ -49,25 +49,6 @@ class sc_htaccess(
   $htaccess_file = "$protected_dir/.htaccess"
   $htuser        = hiera_hash('sc_htaccess::htuser', {})
 
-  # check if file exists
-  exec { 'check_presence_of_htaccess_file':
-    command => '/bin/false',
-    onlyif => "/usr/bin/test -f $htaccess_file",
-  }
-
-#  exec { 'check_absence_of_htaccess_file':
-#    command => '/bin/false',
-#    unless => "/usr/bin/test ! -f $htaccess_file",
-#  }
-
-
-
-#  file_line { 'add_auth_user_file':
-#    require => Exec['check_presence_of_htaccess_file'],
-#  }
-
-
-
   file { $htpasswd_file:
     path => "$htpasswd_file_path/.htpasswd",
     owner => $owner,
