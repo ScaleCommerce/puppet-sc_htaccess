@@ -56,7 +56,7 @@ class sc_htaccess(
     content => template("${module_name}/htpasswd.erb"),
   }
 
-  notify { "DEBUG: $htuser"}
+  notify { "DEBUG: $htuser" }
 
   file { $htaccess_file:
     path => "$protected_dir/.htaccess",
