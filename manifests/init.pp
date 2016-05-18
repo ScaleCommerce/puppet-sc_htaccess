@@ -45,7 +45,10 @@ class sc_htaccess(
   $ensure         = 'file',
 ) {
 
-  file { $htpasswd_file_path:
+  $htpasswd_file = "$htpasswd_file_path/.htpasswd"
+  $htaccess_file = "$protected_dir/.htaccess"
+
+  file { $htpasswd_file:
     path => "$htpasswd_file_path/.htpasswd",
     owner => $owner,
     group => $group,
@@ -53,7 +56,7 @@ class sc_htaccess(
     content => template("${module_name}/htpasswd.erb"),
   }->
 
-  file { $protected_dir:
+  file { $htaccess_file:
     path => "$protected_dir/htaccess",
     owner => $owner,
     group => $group,
