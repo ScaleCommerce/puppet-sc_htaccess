@@ -54,9 +54,7 @@ class sc_htaccess(
     group => $group,
     ensure => $ensure,
     content => template("${module_name}/htpasswd.erb"),
-  }
-
-  notify { "DEBUG: $htuser": }
+  }->
 
   file { $htaccess_file:
     path => "$protected_dir/.htaccess",
