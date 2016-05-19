@@ -81,10 +81,6 @@ class sc_htaccess(
     path    => $htaccess_file,
     match   => '^AuthUserFile',
     line    => "AuthUserFile '$htpasswd_file'",
-  }->
-
-  exec { 'remove_htaccess_tmp_file':
-    command => "/bin/rm $htaccess_tmp_file",
   }
 
 
