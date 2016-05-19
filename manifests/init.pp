@@ -49,30 +49,46 @@ class sc_htaccess(
   $ensure                 = 'file',
 ) {
 
-  $htpasswd_file = "$htpasswd_file_path/.htpasswd"
-  $htaccess_file = "$protected_dir/.htaccess"
-  $htuser        = hiera_hash('sc_htaccess::htuser', {})
+  $htpasswd_file     = "$htpasswd_file_path/.htpasswd"
+  $htaccess_file     = "$protected_dir/.htaccess"
+  $htaccess_tmp_file = "$protected_dir/.htaccess_tmp"
+  $htuser            = hiera_hash('sc_htaccess::htuser', {})
 
   file { $htpasswd_file:
-    path => "$htpasswd_file_path/.htpasswd",
-    owner => $owner,
-    group => $group,
-    ensure => $ensure,
+    path    => "$htpasswd_file_path/.htpasswd",
+    owner   => $owner,
+    group   => $group,
+    ensure  => $ensure,
     content => template("${module_name}/htpasswd.erb"),
   }->
 
-  file { $htaccess_file:
-    path => "$protected_dir/.htaccess",
-    owner => $owner,
-    group => $group,
-    ensure => $ensure,
+  file { $htaccess_tmp_file:
+    path    => "$protected_dir/.htaccess_tmp",
+    owner   => $owner,
+    group   => $group,
+    ensure  => $ensure,
     replace => false,
     content => template("${module_name}/htaccess.erb"),
   }->
+
+  exec { 'move_htaccess_tmp_file':
+    creates => $htaccess_file,
+    command => "/bin/mv $htaccess_tmp_file $htaccess_file",
+  }->
+
   file_line { 'replace_auth_user_file':
-    ensure => present,
-    path => $htaccess_file,
-    match => '^AuthUserFile',
-    line => "AuthUserFile '$htpasswd_file'",
+    ensure  => present,
+    path    => $htaccess_file,
+    match   => '^AuthUserFile',
+    line    => "AuthUserFile '$htpasswd_file'",
+  }->
+
+  exec { 'remove_htaccess_tmp_file':
+    command => "/bin/rm $htaccess_tmp_file",
   }
+
+
+
+
+
 }
